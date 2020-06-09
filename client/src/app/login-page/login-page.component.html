@@ -14,7 +14,7 @@
             <mat-label>Selecione</mat-label>
             <mat-select>
                 <mat-option *ngFor="let user of userList" [value]="user">
-                   <span><img src="https://i.chzbgr.com/full/8334924288/hCFACD046/stock-photo-of-hide-the-pain-harold-looking-at-the-camera-with-a-pained-expression" alt="Avatar" class="avatar"></span> {{user}}
+                   <span><img src={{user.photoUrl}} alt="Avatar" class="avatar"></span> {{user.name}}
                 </mat-option>
             </mat-select>
         </mat-form-field>
