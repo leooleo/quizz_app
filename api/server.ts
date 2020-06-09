@@ -3,7 +3,7 @@ import http = require('http');
 import socketIo = require('socket.io');
 import { UserModel, getInitialUserList } from './user_model';
 
-const port = process.env.port || 8080
+const port = process.env.PORT || 8080
 const app: express.Application = express();
 const server = http.createServer(app);
 const wsServer = socketIo(server);
