@@ -1,0 +1,30 @@
+.login-card {
+    width: 50%;
+    margin: 5vh auto;
+    height: 50vh;
+}
+
+.body {
+    background-color: #e8e8e8;
+    height: 100vh;
+}
+
+.card-contents {
+    margin-top: 100px;
+}
+
+.avatar {
+    vertical-align: middle;
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    margin-right: 10px;
+  }
+
+.center-card-element {
+    width: 100%;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
