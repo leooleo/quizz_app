@@ -50,6 +50,7 @@ server.listen(port, function () {
     console.log('App is listening');
 });
 
-wsServer.on('connection', () => {
+wsServer.on('connection', (socket) => {
     console.log('new connection!');
+    socket.emit('message', 'Hello Client!');
 });

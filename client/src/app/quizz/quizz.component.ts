@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Socket } from 'ngx-socket-io';
 
 @Component({
   templateUrl: './quizz.component.html',
@@ -6,9 +7,17 @@ import { Component, OnInit } from '@angular/core';
 })
 export class QuizzComponent implements OnInit {
 
-  constructor() { }
+  constructor(private socket: Socket) { }
 
   ngOnInit(): void {
+    this.socket.fromEvent("message").subscribe((data: string) => { 
+      console.log('receiving ' + data) 
+    });
   }
+  getMessage() {
+    
+
+  }
+
 
 }

@@ -14,7 +14,9 @@ import { QuestionMakerComponent } from './question-maker/question-maker.componen
 import { HttpClientModule } from '@angular/common/http';
 import { NgxLoadingModule } from 'ngx-loading';
 import { QuizzComponent } from './quizz/quizz.component';
+import { SocketIoModule, SocketIoConfig } from 'ngx-socket-io';
 
+const config: SocketIoConfig = { url: 'http://localhost:8080', options: {} };
 
 @NgModule({
   declarations: [
@@ -33,7 +35,8 @@ import { QuizzComponent } from './quizz/quizz.component';
     MatCardModule,
     MatSelectModule,
     HttpClientModule,
-    NgxLoadingModule
+    NgxLoadingModule,
+    SocketIoModule.forRoot(config)
   ],
   providers: [],
   bootstrap: [AppComponent]
