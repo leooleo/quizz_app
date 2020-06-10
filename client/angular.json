@@ -123,5 +123,8 @@
       }
     }
   },
-  "defaultProject": "quizz-app"
+  "defaultProject": "quizz-app",
+  "cli": {
+    "analytics": "efd5c26d-8215-49b8-a7ac-2e7a9ff7ded6"
+  }
 }

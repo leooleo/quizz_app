@@ -10,12 +10,14 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatIconModule } from '@angular/material/icon';
 import { MatCardModule } from '@angular/material/card';
 import { MatSelectModule } from '@angular/material/select';
+import { QuestionMakerComponent } from './question-maker/question-maker.component';
 
 
 @NgModule({
   declarations: [
     AppComponent,
-    LoginPageComponent
+    LoginPageComponent,
+    QuestionMakerComponent
   ],
   imports: [
     BrowserModule,

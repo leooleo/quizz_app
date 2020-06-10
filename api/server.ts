@@ -12,14 +12,12 @@ const wsServer = socketIo(server);
 
 const initialUsers: Array<UserModel> = getInitialUserList();
 const staticDirectory: string = path.join(__dirname + '/../assets/');
+const clientBuildDirectory: string = path.join(__dirname + '/../client/dist/quizz-app');
 
 app.use(express.static(staticDirectory));
+app.use(express.static(clientBuildDirectory));
 
-app.get('/', function (req, res) {
-    res.send('<h1>Hello World</h1>');
-});
-
-app.get('/photo/:name', function (req, res) {
+app.get('/api/photo/:name', function (req, res) {
     var userName: string = req.params.name;
     var photos = fs.readdirSync(staticDirectory);
     var didFindPhoto = false;
@@ -34,6 +32,10 @@ app.get('/photo/:name', function (req, res) {
         res.statusCode = 400;
         res.send('File not found');
     }
+});
+
+app.get('/*', function (req, res) {
+    res.sendFile('index.html', {root: clientBuildDirectory});
 });
 
 server.listen(port, function () {
