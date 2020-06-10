@@ -44,6 +44,5 @@ server.listen(port, function () {
     console.log('App is listening');
 });
 wsServer.on('connection', function (socket) {
-    console.log('new connection!');
-    socket.emit('message', 'Hello Client!');
+    socket.emit('message', "Hello at: " + new Date().toString());
 });

@@ -11,7 +11,7 @@ export class QuizzComponent implements OnInit {
 
   ngOnInit(): void {
     this.socket.fromEvent("message").subscribe((data: string) => { 
-      console.log('receiving ' + data) 
+      console.log('[WSS] ' + data) 
     });
   }
   getMessage() {
