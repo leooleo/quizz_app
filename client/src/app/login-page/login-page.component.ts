@@ -1,5 +1,7 @@
 import { Component, OnInit, NgModule } from '@angular/core';
 import { FormControl } from '@angular/forms';
+import { ApiService } from '../api.service';
+import { UserModel } from '../user-model';
 
 @Component({
   templateUrl: './login-page.component.html',
@@ -7,15 +9,18 @@ import { FormControl } from '@angular/forms';
 })
 export class LoginPageComponent implements OnInit {
   toppings = new FormControl();
+  loading: boolean;
+  availableUsers: UserModel[] = new Array<UserModel>();
 
-  userList = [{ 'name': 'Léo', photoUrl: '/api/photo/Léo' },
-  { 'name': 'Bonfa', photoUrl: '/api/photo/Bonfa' },
-  { 'name': 'Loris', photoUrl: '/api/photo/Loris' },
-  { 'name': 'Nat', photoUrl: '/api/photo/Nat' },];
+  constructor(private apiService: ApiService) { }
 
-  constructor() { }
-
-  ngOnInit(): void {
+  ngOnInit() {
+    this.loading = true;
+    this.apiService.getAvailableUsers().subscribe((data: UserModel[]) => {
+      console.log('receiving');
+      console.log(data);
+      this.availableUsers = data;
+      this.loading = false;
+    });
   }
-
 }

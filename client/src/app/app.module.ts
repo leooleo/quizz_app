@@ -11,13 +11,20 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatCardModule } from '@angular/material/card';
 import { MatSelectModule } from '@angular/material/select';
 import { QuestionMakerComponent } from './question-maker/question-maker.component';
+import { HttpClientModule } from '@angular/common/http';
+import { NgxLoadingModule } from 'ngx-loading';
+import { QuizzComponent } from './quizz/quizz.component';
+import { SocketIoModule, SocketIoConfig } from 'ngx-socket-io';
+import { environment } from 'src/environments/environment';
 
+const config: SocketIoConfig = { url: environment.serverUrl, options: {} };
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginPageComponent,
-    QuestionMakerComponent
+    QuestionMakerComponent,
+    QuizzComponent
   ],
   imports: [
     BrowserModule,
@@ -27,7 +34,10 @@ import { QuestionMakerComponent } from './question-maker/question-maker.componen
     MatToolbarModule,
     MatIconModule,
     MatCardModule,
-    MatSelectModule
+    MatSelectModule,
+    HttpClientModule,
+    NgxLoadingModule,
+    SocketIoModule.forRoot(config)
   ],
   providers: [],
   bootstrap: [AppComponent]
