@@ -11,6 +11,8 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatCardModule } from '@angular/material/card';
 import { MatSelectModule } from '@angular/material/select';
 import { QuestionMakerComponent } from './question-maker/question-maker.component';
+import { HttpClientModule } from '@angular/common/http';
+import { NgxLoadingModule } from 'ngx-loading';
 
 
 @NgModule({
@@ -27,7 +29,9 @@ import { QuestionMakerComponent } from './question-maker/question-maker.componen
     MatToolbarModule,
     MatIconModule,
     MatCardModule,
-    MatSelectModule
+    MatSelectModule,
+    HttpClientModule,
+    NgxLoadingModule
   ],
   providers: [],
   bootstrap: [AppComponent]
