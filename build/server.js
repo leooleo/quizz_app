@@ -12,7 +12,7 @@ var server = http.createServer(app);
 var wsServer = socketIo(server);
 var initialUsers = user_model_1.getInitialUserList();
 var staticDirectory = path.join(__dirname + '/../assets/');
-var clientBuildDirectory = path.join(__dirname + '/../client/build/');
+var clientBuildDirectory = path.join(__dirname + '/../client/dist/quizz-app/');
 app.use(express.static(staticDirectory));
 app.use(express.static(clientBuildDirectory));
 app.get('/api/photo/:name', function (req, res) {

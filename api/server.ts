@@ -12,7 +12,7 @@ const wsServer = socketIo(server);
 
 const initialUsers: Array<UserModel> = getInitialUserList();
 const staticDirectory: string = path.join(__dirname + '/../assets/');
-const clientBuildDirectory: string = path.join(__dirname + '/../client/build/');
+const clientBuildDirectory: string = path.join(__dirname + '/../client/dist/quizz-app/');
 
 app.use(express.static(staticDirectory));
 app.use(express.static(clientBuildDirectory));
