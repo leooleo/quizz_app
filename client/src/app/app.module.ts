@@ -16,6 +16,9 @@ import { NgxLoadingModule } from 'ngx-loading';
 import { QuizzComponent } from './quizz/quizz.component';
 import { SocketIoModule, SocketIoConfig } from 'ngx-socket-io';
 import { environment } from 'src/environments/environment';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 
 const config: SocketIoConfig = { url: environment.serverUrl, options: {} };
 
@@ -37,7 +40,11 @@ const config: SocketIoConfig = { url: environment.serverUrl, options: {} };
     MatSelectModule,
     HttpClientModule,
     NgxLoadingModule,
-    SocketIoModule.forRoot(config)
+    SocketIoModule.forRoot(config),
+    MatFormFieldModule,
+    MatInputModule,
+    FormsModule,
+    ReactiveFormsModule,
   ],
   providers: [],
   bootstrap: [AppComponent]
