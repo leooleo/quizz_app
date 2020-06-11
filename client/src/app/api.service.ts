@@ -4,6 +4,7 @@ import { UserModel } from './user-model';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { QuestionModel } from './question-model';
+import { ServerResponse } from './server-response';
 
 @Injectable({
   providedIn: 'root'
@@ -18,5 +19,9 @@ export class ApiService {
 
   getUserQuestions(user: string): Observable<QuestionModel[]> {
     return this.httpClient.get<QuestionModel[]>(`${environment.serverUrl}/api/questions/${user}`);
+  }
+
+  sendQuestion(question: QuestionModel): Observable<ServerResponse> {
+    return this.httpClient.post<ServerResponse>(`${environment.serverUrl}/api/question/${question.createdByUser}`, question);
   }
 }

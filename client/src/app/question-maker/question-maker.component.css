@@ -4,6 +4,12 @@
 
 .question-card-quizz {
     width: 50%;
-    margin: 5vh auto;
-    height: 77.5vh;
+    margin: 2.5vh auto;
+    height: 80vh;
+}
+
+.radio-question {    
+    margin-top: 5px;
+    margin-bottom: 15px;
+    margin-left: 10px;
 }

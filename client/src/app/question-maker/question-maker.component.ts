@@ -3,8 +3,10 @@ import { LoginService } from '../login.service';
 import { UserModel } from '../user-model';
 import { ApiService } from '../api.service';
 import { Router } from '@angular/router';
-import { FormControl, Validators, FormGroup } from '@angular/forms';
+import { FormControl, Validators, FormGroup, FormGroupDirective } from '@angular/forms';
 import { QuestionModel } from '../question-model';
+import { ServerResponse } from '../server-response';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   templateUrl: './question-maker.component.html',
@@ -13,39 +15,65 @@ import { QuestionModel } from '../question-model';
 export class QuestionMakerComponent implements OnInit {
   user: UserModel;
   loading: boolean;
-  userQuestionCount: Number;
+  userQuestionCount: number;
   currentQuestion: QuestionModel;
-  questionFormControl: FormControl;
-  answersFormControl: FormControl;
   profileForm = new FormGroup({
-    question: new FormControl('', [Validators.required]),
+    question: new FormControl('', [Validators.required, this.noWhitespaceValidator]),
     firstAnswer: new FormControl('', [Validators.required]),
     secondAnswer: new FormControl('', [Validators.required]),
     thirdAnswer: new FormControl('', [Validators.required]),
+    correctOption: new FormControl('1'),
   });
 
-  constructor(private loginService: LoginService, private apiService: ApiService, private router: Router) { }
+  constructor(private loginService: LoginService, private apiService: ApiService, private router: Router, private snackBar: MatSnackBar) { }
+
+  noWhitespaceValidator(control: FormControl) {
+    const isWhitespace = (control.value || '').trim().length === 0;
+    const isValid = !isWhitespace;
+    return isValid ? null : { 'whitespace': true };
+  }
 
   ngOnInit(): void {
     this.user = this.loginService.loggedUser;
-    this.questionFormControl = new FormControl('', [Validators.required]);
-    this.answersFormControl = new FormControl('', [Validators.required]);
     this.validateUser();
     this.getUserAnsweredQuestions();
   }
 
-  onSubmit() {
-    if (!this.profileForm.valid) return;
+  onSubmit(formDirective: FormGroupDirective) {
+    if (!this.profileForm.valid) {
+      this.snackBar.open('É necessário preencher todos os campos', 'Ok', { duration: 3000 });
+      return;
+    };
 
-    var model = new QuestionModel(
+    var model = this.createModel();
+
+    this.loading = true;
+    this.apiService.sendQuestion(model).subscribe((response: ServerResponse) => {
+      this.loading = false;
+      if (response.message == 'ok') {
+        this.snackBar.open('Pergunta registrada!', 'Ok', { duration: 3000 });
+        formDirective.resetForm();
+        this.profileForm.reset();
+        this.profileForm.get('correctOption').setValue('1');
+        this.userQuestionCount += 1;
+      }
+      else {
+        this.snackBar.open('Erro desconhecido ' + response.message, 'Ok', { duration: 3000 })
+      }
+    });
+  }
+
+  private createModel(): QuestionModel {
+    return new QuestionModel(
       this.profileForm.value.question,
+      this.user.name,
       [
         this.profileForm.value.firstAnswer,
         this.profileForm.value.secondAnswer,
         this.profileForm.value.thirdAnswer
-      ]);
-
-    console.log(model);
+      ],
+      this.profileForm.value.correctOption
+    );
   }
 
   private getUserAnsweredQuestions() {
@@ -65,5 +93,10 @@ export class QuestionMakerComponent implements OnInit {
     else if (this.user.hasAnswered) {
       this.router.navigate(['/quizz']);
     }
+  }
+
+  routeToQuizz() {
+    this.loginService.loggedUser = this.user;
+    this.router.navigate(['/quizz']);
   }
 }

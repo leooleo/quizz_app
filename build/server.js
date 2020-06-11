@@ -14,7 +14,7 @@ var wsServer = socketIo(server);
 var initialUsers = user_model_1.getInitialUserList(port === 8080);
 var staticDirectory = path.join(__dirname + '/../assets/');
 var clientBuildDirectory = path.join(__dirname + '/../client/build/');
-var usersQuestions = new Map();
+var usersQuestions = Array();
 app.use(express.static(staticDirectory));
 app.use(express.static(clientBuildDirectory));
 app.use(express.json());
@@ -48,33 +48,29 @@ app.post('/api/question/:user', function (req, res) {
             throw 'Question not provided';
         if (body.possibleAnswers == undefined || body.possibleAnswers.length == 0)
             throw 'Poosible Answers not provided';
-        var questions = usersQuestions[userName];
+        var questions = usersQuestions.filter(function (user) { return user.createdByUser == userName; });
         if (questions == undefined || questions == null || questions.length == 0) {
-            usersQuestions[userName] = [body];
-            // TODO remove this dev only!
-            setUserAnswered(userName);
+            usersQuestions.push(body);
         }
         else {
-            questions.push(body);
-            usersQuestions[userName] = questions;
-            console.log(questions);
+            usersQuestions.push(body);
             if (questions.length >= 2) {
                 setUserAnswered(userName);
-                console.log(initialUsers);
             }
         }
-        return res.send('ok');
+        return res.json({ 'message': 'ok' });
     }
     catch (e) {
         res.statusCode = 400;
-        return res.send(e);
+        return res.json({ 'message': e });
     }
 });
 app.get('/api/questions/:user', function (req, res) {
     var user = req.params.user;
-    if (usersQuestions[user] == undefined)
+    var questions = usersQuestions.filter(function (u) { return u.createdByUser == user; });
+    if (questions == undefined || questions == null)
         return res.json([]);
-    return res.json(usersQuestions[user]);
+    return res.json(questions);
 });
 app.get('/api/users', function (req, res) {
     return res.json(initialUsers);

@@ -19,6 +19,8 @@ import { environment } from 'src/environments/environment';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {MatSnackBarModule} from '@angular/material/snack-bar';
+import {MatRadioModule} from '@angular/material/radio';
 
 const config: SocketIoConfig = { url: environment.serverUrl, options: {} };
 
@@ -45,6 +47,8 @@ const config: SocketIoConfig = { url: environment.serverUrl, options: {} };
     MatInputModule,
     FormsModule,
     ReactiveFormsModule,
+    MatSnackBarModule,
+    MatRadioModule
   ],
   providers: [],
   bootstrap: [AppComponent]

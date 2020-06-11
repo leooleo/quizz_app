@@ -15,7 +15,7 @@ const wsServer = socketIo(server);
 const initialUsers: Array<UserModel> = getInitialUserList(port === 8080);
 const staticDirectory: string = path.join(__dirname + '/../assets/');
 const clientBuildDirectory: string = path.join(__dirname + '/../client/build/');
-const usersQuestions: Map<string, Array<QuestionModel>> = new Map<string, Array<QuestionModel>>();
+const usersQuestions: Array<QuestionModel> = Array<QuestionModel>();
 
 app.use(express.static(staticDirectory));
 app.use(express.static(clientBuildDirectory));
@@ -55,37 +55,33 @@ app.post('/api/question/:user', function (req, res) {
             throw 'Poosible Answers not provided';
 
 
-        var questions: Array<QuestionModel> = usersQuestions[userName];
+        var questions: Array<QuestionModel> = usersQuestions.filter((user) => user.createdByUser == userName);
         if (questions == undefined || questions == null || questions.length == 0) {
-            usersQuestions[userName] = [body];
-            // TODO remove this dev only!
-            setUserAnswered(userName);
+            usersQuestions.push(body);
         }
         else {
-            questions.push(body);
-            usersQuestions[userName] = questions;
-            console.log(questions);
+            usersQuestions.push(body);            
             if (questions.length >= 2) {
                 setUserAnswered(userName);
-                console.log(initialUsers);
             }
         }
 
-        return res.send('ok');
+        return res.json({ 'message': 'ok' });
     }
     catch (e) {
         res.statusCode = 400;
 
-        return res.send(e);
+        return res.json({ 'message': e });
     }
 });
 
 app.get('/api/questions/:user', function (req, res) {
     var user: string = req.params.user;
-    if (usersQuestions[user] == undefined)
+    var questions = usersQuestions.filter((u) => u.createdByUser == user);
+    if (questions == undefined || questions == null)
         return res.json([]);
 
-    return res.json(usersQuestions[user]);
+    return res.json(questions);
 });
 
 app.get('/api/users', function (req, res) {
