@@ -1,4 +1,4 @@
-.login-card {
+.login-card-quizz {
     width: 50%;
     margin: 5vh auto;
     height: 50vh;
@@ -12,14 +12,6 @@
 .card-contents {
     margin-top: 100px;
 }
-
-.avatar {
-    vertical-align: middle;
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    margin-right: 10px;
-  }
 
 .center-card-element {
     width: 100%;

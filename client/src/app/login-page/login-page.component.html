@@ -6,18 +6,20 @@
         <mat-icon>person</mat-icon>
     </mat-toolbar>
 
-    <mat-card class="login-card">
+    <mat-card class="login-card-quizz">
         <mat-card-header>
             <h1 class="center-card-element" style="margin-left: -30px;">SaLongin</h1>
         </mat-card-header>
         <h3 class="center-card-element card-contents">Qual sa longeiro é você?</h3>
-        <mat-form-field class="center-card-element">
-            <mat-label>Selecione</mat-label>
-            <mat-select>
-                <mat-option *ngFor="let user of availableUsers" [value]="user">
-                    <span><img src={{user.photoUrl}} alt="Avatar" class="avatar"></span> {{user.name}}
-                </mat-option>
-            </mat-select>
-        </mat-form-field>
+        <form>
+            <mat-form-field class="center-card-element">
+                <mat-label>Selecione</mat-label>
+                <mat-select (valueChange)="onSelected($event)">
+                    <mat-option *ngFor="let user of availableUsers" [value]="user">
+                        <span><img src={{user.photoUrl}} alt="Avatar" class="avatar"></span> {{user.name}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+        </form>
     </mat-card>
 </div>

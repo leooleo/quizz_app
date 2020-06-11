@@ -1,6 +1,7 @@
 import { UserModel, getInitialUserList } from './user_model';
-import express = require('express');
+import { QuestionModel } from './question_model';
 import socketIo = require('socket.io');
+import express = require('express');
 import http = require('http');
 import path = require('path');
 import cors = require('cors');
@@ -14,9 +15,11 @@ const wsServer = socketIo(server);
 const initialUsers: Array<UserModel> = getInitialUserList(port === 8080);
 const staticDirectory: string = path.join(__dirname + '/../assets/');
 const clientBuildDirectory: string = path.join(__dirname + '/../client/build/');
+const usersQuestions: Array<QuestionModel> = Array<QuestionModel>();
 
 app.use(express.static(staticDirectory));
 app.use(express.static(clientBuildDirectory));
+app.use(express.json());
 app.use(cors());
 
 app.get('/api/photo/:name', function (req, res) {
@@ -36,10 +39,53 @@ app.get('/api/photo/:name', function (req, res) {
     }
 });
 
-app.get('/api/available-users', function (req, res) {
-    var availableUsers = initialUsers.filter((user) => user.isLogged === false);
+app.get('/api/questions', function (req, res) {
+    return res.json(usersQuestions);
+});
 
-    return res.json(availableUsers);
+app.post('/api/question/:user', function (req, res) {
+    try {
+        var body: QuestionModel = req.body;
+        var userName: string = req.params.user;
+        if (body == null || body == undefined)
+            throw 'QuestionModel not provided';
+        if (body.question == undefined)
+            throw 'Question not provided';
+        if (body.possibleAnswers == undefined || body.possibleAnswers.length == 0)
+            throw 'Poosible Answers not provided';
+
+
+        var questions: Array<QuestionModel> = usersQuestions.filter((user) => user.createdByUser == userName);
+        if (questions == undefined || questions == null || questions.length == 0) {
+            usersQuestions.push(body);
+        }
+        else {
+            usersQuestions.push(body);            
+            if (questions.length >= 2) {
+                setUserAnswered(userName);
+            }
+        }
+
+        return res.json({ 'message': 'ok' });
+    }
+    catch (e) {
+        res.statusCode = 400;
+
+        return res.json({ 'message': e });
+    }
+});
+
+app.get('/api/questions/:user', function (req, res) {
+    var user: string = req.params.user;
+    var questions = usersQuestions.filter((u) => u.createdByUser == user);
+    if (questions == undefined || questions == null)
+        return res.json([]);
+
+    return res.json(questions);
+});
+
+app.get('/api/users', function (req, res) {
+    return res.json(initialUsers);
 });
 
 app.get('/*', function (req, res) {
@@ -53,3 +99,9 @@ server.listen(port, function () {
 wsServer.on('connection', (socket) => {
     socket.emit('message', `Hello at: ${new Date().toString()}`);
 });
+
+function setUserAnswered(userName: string) {
+    initialUsers.map((u: UserModel) => {
+        if (u.name == userName) u.hasAnswered = true;
+    });
+}
