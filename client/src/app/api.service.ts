@@ -12,6 +12,6 @@ export class ApiService {
   constructor(private httpClient: HttpClient) { }
 
   getAvailableUsers(): Observable<UserModel[]> {
-  return this.httpClient.get<UserModel[]>(`${environment.serverUrl}/api/available-users`);
+    return this.httpClient.get<UserModel[]>(`${environment.serverUrl}/api/available-users`);
   }
 }
