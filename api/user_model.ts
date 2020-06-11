@@ -5,7 +5,7 @@ export class UserModel {
     isLogged: boolean;
     photoUrl: string;
 
-    constructor(name: string, score: Number, hasAnswered: boolean, isLogged: boolean, isLocal: boolean) {        
+    constructor(name: string, score: Number, hasAnswered: boolean, isLogged: boolean, isLocal: boolean) {
         this.name = name;
         this.score = score;
         this.hasAnswered = hasAnswered;
