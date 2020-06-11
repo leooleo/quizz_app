@@ -19,5 +19,4 @@ export class QuestionMakerComponent implements OnInit {
       this.router.navigate(['/login']);
     }
   }
-
 }

@@ -1,8 +1,8 @@
 "use strict";
 exports.__esModule = true;
 var user_model_1 = require("./user_model");
-var express = require("express");
 var socketIo = require("socket.io");
+var express = require("express");
 var http = require("http");
 var path = require("path");
 var cors = require("cors");
@@ -14,8 +14,10 @@ var wsServer = socketIo(server);
 var initialUsers = user_model_1.getInitialUserList(port === 8080);
 var staticDirectory = path.join(__dirname + '/../assets/');
 var clientBuildDirectory = path.join(__dirname + '/../client/build/');
+var usersQuestions = new Map();
 app.use(express.static(staticDirectory));
 app.use(express.static(clientBuildDirectory));
+app.use(express.json());
 app.use(cors());
 app.get('/api/photo/:name', function (req, res) {
     var userName = req.params.name;
@@ -31,6 +33,34 @@ app.get('/api/photo/:name', function (req, res) {
     if (!didFindPhoto) {
         res.statusCode = 400;
         res.send('File not found');
+    }
+});
+app.get('/api/questions', function (req, res) {
+    return res.json(usersQuestions);
+});
+app.post('/api/question/:user', function (req, res) {
+    try {
+        var body = req.body;
+        var user = req.params.user;
+        if (body == null || body == undefined)
+            throw 'QuestionModel not provided';
+        if (body.question == undefined)
+            throw 'Question not provided';
+        if (body.possibleAnswers == undefined || body.possibleAnswers.length == 0)
+            throw 'Poosible Answers not provided';
+        var questions = usersQuestions[user];
+        if (questions == undefined || questions == null || questions.length == 0) {
+            usersQuestions[user] = [body];
+        }
+        else {
+            questions.push(body);
+            usersQuestions[user] = questions;
+        }
+        return res.send('ok');
+    }
+    catch (e) {
+        res.statusCode = 400;
+        return res.send(e);
     }
 });
 app.get('/api/available-users', function (req, res) {
