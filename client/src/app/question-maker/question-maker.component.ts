@@ -15,6 +15,10 @@ export class QuestionMakerComponent implements OnInit {
 
   ngOnInit(): void {
     this.user = this.loginService.loggedUser;
+    this.validateUser();
+  }
+
+  private validateUser() {
     if (this.user == undefined) {
       this.router.navigate(['/login']);
     }
