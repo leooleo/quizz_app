@@ -23,7 +23,7 @@ export class QuizzComponent implements OnInit {
       if (this.user == undefined) {
         this.router.navigate(['/login']);
       }
-      else if(!this.user.hasAnswered) {
+      else if (this.user.hasAnswered) {
         this.router.navigate(['/question']);
       }
     }

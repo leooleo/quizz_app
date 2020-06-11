@@ -28,7 +28,7 @@ export class LoginPageComponent implements OnInit {
 
   onSelected(selectedUser: UserModel) {
     this.loginService.loggedUser = selectedUser;
-    if(selectedUser.hasAnswered) {
+    if(!selectedUser.hasAnswered) {
       this.router.navigate(['/question']);  
     }
     else {

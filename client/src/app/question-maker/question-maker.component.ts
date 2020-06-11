@@ -11,16 +11,29 @@ import { Router } from '@angular/router';
 export class QuestionMakerComponent implements OnInit {
   user: UserModel;
   loading: boolean;
+  userQuestionCount: Number;
   constructor(private loginService: LoginService, private apiService: ApiService, private router: Router) { }
 
   ngOnInit(): void {
     this.user = this.loginService.loggedUser;
     this.validateUser();
+    this.getUserAnsweredQuestions();
+  }
+
+  private getUserAnsweredQuestions() {
+    this.loading = true;
+    this.apiService.getUserQuestions(this.user.name).subscribe((questions) => {
+      this.userQuestionCount = questions.length;      
+      this.loading = false;      
+    });
   }
 
   private validateUser() {
     if (this.user == undefined) {
       this.router.navigate(['/login']);
+    }
+    else if(this.user.hasAnswered) {
+      this.router.navigate(['/quizz']);
     }
   }
 }

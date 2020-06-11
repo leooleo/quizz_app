@@ -46,22 +46,29 @@ app.get('/api/questions', function (req, res) {
 app.post('/api/question/:user', function (req, res) {
     try {
         var body: QuestionModel = req.body;
-        var user: string = req.params.user;        
-        if (body == null || body == undefined) 
-            throw 'QuestionModel not provided';        
-        if(body.question == undefined) 
+        var userName: string = req.params.user;
+        if (body == null || body == undefined)
+            throw 'QuestionModel not provided';
+        if (body.question == undefined)
             throw 'Question not provided';
-        if(body.possibleAnswers == undefined || body.possibleAnswers.length == 0)
+        if (body.possibleAnswers == undefined || body.possibleAnswers.length == 0)
             throw 'Poosible Answers not provided';
-        
 
-        var questions: Array<QuestionModel> = usersQuestions[user];
+
+        var questions: Array<QuestionModel> = usersQuestions[userName];
         if (questions == undefined || questions == null || questions.length == 0) {
-            usersQuestions[user] = [body];
+            usersQuestions[userName] = [body];
+            // TODO remove this dev only!
+            setUserAnswered(userName);
         }
         else {
             questions.push(body);
-            usersQuestions[user] = questions;
+            usersQuestions[userName] = questions;
+            console.log(questions);
+            if (questions.length >= 2) {
+                setUserAnswered(userName);
+                console.log(initialUsers);
+            }
         }
 
         return res.send('ok');
@@ -73,10 +80,16 @@ app.post('/api/question/:user', function (req, res) {
     }
 });
 
-app.get('/api/available-users', function (req, res) {
-    var availableUsers = initialUsers.filter((user) => user.isLogged === false);
+app.get('/api/questions/:user', function (req, res) {
+    var user: string = req.params.user;
+    if (usersQuestions[user] == undefined)
+        return res.json([]);
 
-    return res.json(availableUsers);
+    return res.json(usersQuestions[user]);
+});
+
+app.get('/api/users', function (req, res) {
+    return res.json(initialUsers);
 });
 
 app.get('/*', function (req, res) {
@@ -90,3 +103,9 @@ server.listen(port, function () {
 wsServer.on('connection', (socket) => {
     socket.emit('message', `Hello at: ${new Date().toString()}`);
 });
+
+function setUserAnswered(userName: string) {
+    initialUsers.map((u: UserModel) => {
+        if (u.name == userName) u.hasAnswered = true;
+    });
+}

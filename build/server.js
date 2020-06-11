@@ -41,20 +41,27 @@ app.get('/api/questions', function (req, res) {
 app.post('/api/question/:user', function (req, res) {
     try {
         var body = req.body;
-        var user = req.params.user;
+        var userName = req.params.user;
         if (body == null || body == undefined)
             throw 'QuestionModel not provided';
         if (body.question == undefined)
             throw 'Question not provided';
         if (body.possibleAnswers == undefined || body.possibleAnswers.length == 0)
             throw 'Poosible Answers not provided';
-        var questions = usersQuestions[user];
+        var questions = usersQuestions[userName];
         if (questions == undefined || questions == null || questions.length == 0) {
-            usersQuestions[user] = [body];
+            usersQuestions[userName] = [body];
+            // TODO remove this dev only!
+            setUserAnswered(userName);
         }
         else {
             questions.push(body);
-            usersQuestions[user] = questions;
+            usersQuestions[userName] = questions;
+            console.log(questions);
+            if (questions.length >= 2) {
+                setUserAnswered(userName);
+                console.log(initialUsers);
+            }
         }
         return res.send('ok');
     }
@@ -63,9 +70,14 @@ app.post('/api/question/:user', function (req, res) {
         return res.send(e);
     }
 });
-app.get('/api/available-users', function (req, res) {
-    var availableUsers = initialUsers.filter(function (user) { return user.isLogged === false; });
-    return res.json(availableUsers);
+app.get('/api/questions/:user', function (req, res) {
+    var user = req.params.user;
+    if (usersQuestions[user] == undefined)
+        return res.json([]);
+    return res.json(usersQuestions[user]);
+});
+app.get('/api/users', function (req, res) {
+    return res.json(initialUsers);
 });
 app.get('/*', function (req, res) {
     res.sendFile('index.html', { root: clientBuildDirectory });
@@ -76,3 +88,9 @@ server.listen(port, function () {
 wsServer.on('connection', function (socket) {
     socket.emit('message', "Hello at: " + new Date().toString());
 });
+function setUserAnswered(userName) {
+    initialUsers.map(function (u) {
+        if (u.name == userName)
+            u.hasAnswered = true;
+    });
+}
