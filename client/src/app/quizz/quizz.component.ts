@@ -3,6 +3,7 @@ import { Socket } from 'ngx-socket-io';
 import { LoginService } from '../login.service';
 import { Router } from '@angular/router';
 import { UserModel } from '../user-model';
+import { QuestionQuizzModel } from '../question-quizz-model';
 
 @Component({
   templateUrl: './quizz.component.html',
@@ -18,6 +19,10 @@ export class QuizzComponent implements OnInit {
     this.initializeEvents();
   }
 
+  ngOnDestroy() {
+  this.socket.disconnect();
+ }
+
   private validateUser() {
     if (this.user == undefined) {
       if (this.user == undefined) {
@@ -30,8 +35,13 @@ export class QuizzComponent implements OnInit {
   }
 
   private initializeEvents() {
-    this.socket.fromEvent("message").subscribe((data: string) => {
-      console.log('[WSS] ' + data)
+    this.socket.fromEvent('waiting').subscribe((data: string) => {
+      console.log('Waiting ' + data);
+    });
+
+    this.socket.fromEvent('currentQuestion').subscribe((data: QuestionQuizzModel) => {
+      console.log('Current question');
+      console.log(data);
     });
   }
 

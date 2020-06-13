@@ -1,11 +1,12 @@
 import { UserModel, getInitialUserList } from './user_model';
-import { QuestionModel } from './question_model';
+import { QuestionModel, getMockQuestions } from './question_model';
 import socketIo = require('socket.io');
 import express = require('express');
 import http = require('http');
 import path = require('path');
 import cors = require('cors');
 import fs = require('fs');
+import { QuizzQuestionModel } from './quizz_question_model';
 
 const port = process.env.PORT || 8080
 const app: express.Application = express();
@@ -15,7 +16,7 @@ const wsServer = socketIo(server);
 const initialUsers: Array<UserModel> = getInitialUserList(port === 8080);
 const staticDirectory: string = path.join(__dirname + '/../assets/');
 const clientBuildDirectory: string = path.join(__dirname + '/../client/build/');
-const usersQuestions: Array<QuestionModel> = Array<QuestionModel>();
+var usersQuestions: Array<QuestionModel> = Array<QuestionModel>();
 
 app.use(express.static(staticDirectory));
 app.use(express.static(clientBuildDirectory));
@@ -60,8 +61,8 @@ app.post('/api/question/:user', function (req, res) {
             usersQuestions.push(body);
         }
         else {
-            usersQuestions.push(body);            
-            if (questions.length >= 2) {
+            usersQuestions.push(body);
+            if (questions.length >= 3) {
                 setUserAnswered(userName);
             }
         }
@@ -96,9 +97,26 @@ server.listen(port, function () {
     console.log('App is listening');
 });
 
+//TODO: mock only!
+usersQuestions = getMockQuestions();
+var numberOfClients: number = 0;
 wsServer.on('connection', (socket) => {
-    socket.emit('message', `Hello at: ${new Date().toString()}`);
+    socket.on('disconnect', () => {
+        if (numberOfClients > 0)
+            numberOfClients -= 1;
+    });
+    numberOfClients += 1;
+    console.log(`connected ${numberOfClients} of ${initialUsers.length}`);
+    if (numberOfClients < initialUsers.length) {
+        socket.emit('waiting', `Aguardando ${initialUsers.length - numberOfClients} usuário(s) se conectar(em)`);
+    }
+    else {
+        var currentQuestion = usersQuestions[0];
+        var quizzQuestion = new QuizzQuestionModel(currentQuestion);
+        wsServer.sockets.emit('currentQuestion', quizzQuestion);
+    }
 });
+
 
 function setUserAnswered(userName: string) {
     initialUsers.map((u: UserModel) => {

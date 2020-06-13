@@ -1,12 +1,14 @@
 "use strict";
 exports.__esModule = true;
 var user_model_1 = require("./user_model");
+var question_model_1 = require("./question_model");
 var socketIo = require("socket.io");
 var express = require("express");
 var http = require("http");
 var path = require("path");
 var cors = require("cors");
 var fs = require("fs");
+var quizz_question_model_1 = require("./quizz_question_model");
 var port = process.env.PORT || 8080;
 var app = express();
 var server = http.createServer(app);
@@ -54,7 +56,7 @@ app.post('/api/question/:user', function (req, res) {
         }
         else {
             usersQuestions.push(body);
-            if (questions.length >= 2) {
+            if (questions.length >= 3) {
                 setUserAnswered(userName);
             }
         }
@@ -81,8 +83,24 @@ app.get('/*', function (req, res) {
 server.listen(port, function () {
     console.log('App is listening');
 });
+//TODO: mock only!
+usersQuestions = question_model_1.getMockQuestions();
+var numberOfClients = 0;
 wsServer.on('connection', function (socket) {
-    socket.emit('message', "Hello at: " + new Date().toString());
+    socket.on('disconnect', function () {
+        if (numberOfClients > 0)
+            numberOfClients -= 1;
+    });
+    numberOfClients += 1;
+    console.log("connected " + numberOfClients + " of " + initialUsers.length);
+    if (numberOfClients < initialUsers.length) {
+        socket.emit('waiting', "Aguardando " + (initialUsers.length - numberOfClients) + " usu\u00E1rio(s) se conectar(em)");
+    }
+    else {
+        var currentQuestion = usersQuestions[0];
+        var quizzQuestion = new quizz_question_model_1.QuizzQuestionModel(currentQuestion);
+        wsServer.sockets.emit('currentQuestion', quizzQuestion);
+    }
 });
 function setUserAnswered(userName) {
     initialUsers.map(function (u) {

@@ -49,10 +49,14 @@
         <mat-card-footer>
             <div *ngIf="userQuestionCount < 3;else goToQuizz">
                 <h5>{{3 - userQuestionCount}} pergunta(s) faltando</h5>
-            </div>
+                <br>
+                <br>
+            </div>            
             <ng-template #goToQuizz >
                 <br>
                 <button mat-raised-button color="accent" (click)="routeToQuizz()">Ir para o quizz</button>
+                <br>
+                <br>
             </ng-template>
             
         </mat-card-footer>
