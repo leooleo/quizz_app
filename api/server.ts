@@ -100,10 +100,13 @@ server.listen(port, function () {
 //TODO: mock only!
 usersQuestions = getMockQuestions();
 var numberOfClients: number = 0;
+var notifiedClientsOfQuestion: boolean = false;
 wsServer.on('connection', (socket) => {
     socket.on('disconnect', () => {
-        if (numberOfClients > 0)
+        if (numberOfClients > 0) {
             numberOfClients -= 1;
+            console.log(`connected ${numberOfClients} of ${initialUsers.length}`);
+        }
     });
     numberOfClients += 1;
     console.log(`connected ${numberOfClients} of ${initialUsers.length}`);
@@ -113,7 +116,13 @@ wsServer.on('connection', (socket) => {
     else {
         var currentQuestion = usersQuestions[0];
         var quizzQuestion = new QuizzQuestionModel(currentQuestion);
-        wsServer.sockets.emit('currentQuestion', quizzQuestion);
+        if (!notifiedClientsOfQuestion) {
+            wsServer.sockets.emit('currentQuestion', quizzQuestion);
+            notifiedClientsOfQuestion = true;
+        }
+        else {
+            socket.emit('currentQuestion', quizzQuestion);
+        }
     }
 });
 

@@ -86,10 +86,13 @@ server.listen(port, function () {
 //TODO: mock only!
 usersQuestions = question_model_1.getMockQuestions();
 var numberOfClients = 0;
+var notifiedClientsOfQuestion = false;
 wsServer.on('connection', function (socket) {
     socket.on('disconnect', function () {
-        if (numberOfClients > 0)
+        if (numberOfClients > 0) {
             numberOfClients -= 1;
+            console.log("connected " + numberOfClients + " of " + initialUsers.length);
+        }
     });
     numberOfClients += 1;
     console.log("connected " + numberOfClients + " of " + initialUsers.length);
@@ -99,7 +102,13 @@ wsServer.on('connection', function (socket) {
     else {
         var currentQuestion = usersQuestions[0];
         var quizzQuestion = new quizz_question_model_1.QuizzQuestionModel(currentQuestion);
-        wsServer.sockets.emit('currentQuestion', quizzQuestion);
+        if (!notifiedClientsOfQuestion) {
+            wsServer.sockets.emit('currentQuestion', quizzQuestion);
+            notifiedClientsOfQuestion = true;
+        }
+        else {
+            socket.emit('currentQuestion', quizzQuestion);
+        }
     }
 });
 function setUserAnswered(userName) {

@@ -15,9 +15,9 @@ export class QuestionModel {
 export function getMockQuestions(): Array<QuestionModel> {
     return new Array<QuestionModel>(
         new QuestionModel(
-            'Quem sou eu?',
+            'Qual meu nome inteiro?',
             'Léo',
-            ['Léo', 'Léo', 'Léo'],
+            ['Léo Moraes da Silva', 'Méo Loraes', 'Xeo Moraes'],
             '1'
         ),
         new QuestionModel(

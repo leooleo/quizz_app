@@ -1,1 +1,33 @@
-<p>quizz works!</p>
+<mat-toolbar color="primary">
+    Sa longa quizz
+    <span class="toolbar-spacer"></span>
+    <div>{{user.name}}</div>
+    <img src={{user.photoUrl}} class="avatar avatar-marging">
+</mat-toolbar>
+<mat-card class="quizz-card" style="text-align: center;">
+    <ngx-loading [show]="loading"></ngx-loading>
+
+    <div *ngIf="watingForUsers">
+        <mat-card-title>
+            <h4>{{waitingMessage}}</h4>
+        </mat-card-title>
+    </div>
+    <div *ngIf="currentQuestion != undefined">
+        <mat-card-title>
+            <h3>{{currentQuestion.question}}</h3>
+        </mat-card-title>
+        <div *ngFor="let possibleAnswer of currentQuestion.possibleAnswers">
+            <button mat-flat-button color="accent">                
+                {{possibleAnswer}}
+            </button>
+            <br>
+            <br>
+        </div>
+        <mat-card-footer>
+            <div style="text-align: right;">
+                <img src="{{getUserOfQuestionPhoto(currentQuestion.createdByUser)}}" class="created-user-photo">
+            </div>
+            
+        </mat-card-footer>
+    </div>
+</mat-card>

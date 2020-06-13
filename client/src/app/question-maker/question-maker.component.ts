@@ -87,8 +87,8 @@ export class QuestionMakerComponent implements OnInit {
   private validateUser() {
     if (this.user == undefined) {
       // TODO: Remove this mock!
-      this.user = new UserModel('Bonfa', 0, false, false);
-      // this.router.navigate(['/login']);
+      // this.user = new UserModel('Bonfa', 0, false, false);
+      this.router.navigate(['/login']);
     }
     else if (this.user.hasAnswered) {
       this.router.navigate(['/quizz']);
