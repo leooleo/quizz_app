@@ -34,14 +34,16 @@
             </mat-form-field>
             <br>
             <br>
-            <mat-label class="radio-group"><h4>Selecione a opção correta</h4></mat-label>            
-            <div >
+            <mat-label class="radio-group">
+                <h4>Selecione a opção correta</h4>
+            </mat-label>
+            <div>
                 <mat-radio-group formControlName="correctOption">
                     <mat-radio-button value="1" class="radio-question">Opção 1</mat-radio-button>
                     <mat-radio-button value="2" class="radio-question">Opção 2</mat-radio-button>
                     <mat-radio-button value="3" class="radio-question">Opção 3</mat-radio-button>
                 </mat-radio-group>
-            </div>            
+            </div>
             <br>
             <button mat-raised-button color="accent" (click)="onSubmit(formDirective)">Enviar</button>
         </form>
@@ -50,14 +52,14 @@
                 <h5>{{3 - userQuestionCount}} pergunta(s) faltando</h5>
                 <br>
                 <br>
-            </div>            
-            <ng-template #goToQuizz >
+            </div>
+            <ng-template #goToQuizz>
                 <br>
                 <button mat-raised-button color="accent" (click)="routeToQuizz()">Ir para o quizz</button>
                 <br>
                 <br>
             </ng-template>
-            
+
         </mat-card-footer>
     </mat-card>
 </div>

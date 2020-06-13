@@ -28,11 +28,14 @@ export class LoginPageComponent implements OnInit {
 
   onSelected(selectedUser: UserModel) {
     this.loginService.loggedUser = selectedUser;
-    if(!selectedUser.hasAnswered) {
-      this.router.navigate(['/question']);  
-    }
-    else {
-      this.router.navigate(['/quizz']);
-    }    
+    //TODO: mock only!
+    this.router.navigate(['/quizz']);
+
+    // if (!selectedUser.hasAnswered) {
+    //   this.router.navigate(['/question']);
+    // }
+    // else {
+    //   this.router.navigate(['/quizz']);
+    // }
   }
 }

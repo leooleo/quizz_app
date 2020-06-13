@@ -16,7 +16,9 @@ export class QuizzComponent implements OnInit {
   watingForUsers: boolean;
   waitingMessage: string;
   loading: boolean;
+  loadingUsers: boolean;
   currentQuestion: QuestionQuizzModel;
+  users: UserModel[];
   constructor(private socket: Socket, private loginService: LoginService, private router: Router, private apiService: ApiService) { }
 
   ngOnInit(): void {
@@ -25,6 +27,15 @@ export class QuizzComponent implements OnInit {
     this.loading = true;
     this.validateUser();
     this.initializeEvents();
+    this.loadUsers();
+  }
+
+  private loadUsers() {
+    this.loadingUsers = true;
+    this.apiService.getAvailableUsers().subscribe((data: UserModel[]) => {
+      this.users = data;
+      this.loadingUsers = false;
+    });
   }
 
   ngOnDestroy() {

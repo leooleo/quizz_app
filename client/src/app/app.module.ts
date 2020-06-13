@@ -18,9 +18,10 @@ import { SocketIoModule, SocketIoConfig } from 'ngx-socket-io';
 import { environment } from 'src/environments/environment';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import {FormsModule, ReactiveFormsModule} from '@angular/forms';
-import {MatSnackBarModule} from '@angular/material/snack-bar';
-import {MatRadioModule} from '@angular/material/radio';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatRadioModule } from '@angular/material/radio';
+import { MatSidenavModule } from '@angular/material/sidenav';
 
 const config: SocketIoConfig = { url: environment.serverUrl, options: {} };
 
@@ -48,7 +49,8 @@ const config: SocketIoConfig = { url: environment.serverUrl, options: {} };
     FormsModule,
     ReactiveFormsModule,
     MatSnackBarModule,
-    MatRadioModule
+    MatRadioModule,
+    MatSidenavModule,
   ],
   providers: [],
   bootstrap: [AppComponent]
