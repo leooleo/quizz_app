@@ -22,7 +22,7 @@ export class QuizzComponent implements OnInit {
   constructor(private socket: Socket, private loginService: LoginService, private router: Router, private apiService: ApiService) { }
 
   ngOnInit(): void {
-    this.user = this.loginService.loggedUser;
+    this.user = this.loginService.getStoredUser();
     this.socket.connect();
     this.loading = true;
     this.validateUser();

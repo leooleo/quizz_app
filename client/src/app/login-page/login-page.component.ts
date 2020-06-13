@@ -27,7 +27,7 @@ export class LoginPageComponent implements OnInit {
   }
 
   onSelected(selectedUser: UserModel) {
-    this.loginService.loggedUser = selectedUser;
+    this.loginService.storeUser(selectedUser);
     //TODO: mock only!
     this.router.navigate(['/quizz']);
 

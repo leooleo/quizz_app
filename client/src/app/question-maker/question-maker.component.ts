@@ -34,7 +34,7 @@ export class QuestionMakerComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.user = this.loginService.loggedUser;
+    this.user = this.loginService.getStoredUser();
     this.validateUser();
     this.getUserAnsweredQuestions();
   }
@@ -96,7 +96,6 @@ export class QuestionMakerComponent implements OnInit {
   }
 
   routeToQuizz() {
-    this.loginService.loggedUser = this.user;
     this.router.navigate(['/quizz']);
   }
 }
