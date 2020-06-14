@@ -5,7 +5,7 @@
     <img src={{user.photoUrl}} class="avatar avatar-marging">
 </mat-toolbar>
 <mat-sidenav-container>
-    <mat-sidenav  mode="side" opened>
+    <mat-sidenav mode="side" opened>
         <ngx-loading [show]="loadingUsers"></ngx-loading>
         <h2 style="color: white; font-weight: normal;">Placar</h2>
         <div *ngFor="let user of users">
@@ -13,34 +13,43 @@
                 <img src={{user.photoUrl}} class="avatar avatar-marging">
                 {{user.name}}: {{user.score}}
             </h4>
-            
+
         </div>
     </mat-sidenav>
     <mat-sidenav-content style="background-color: #e8e8e8;">
         <mat-card class="quizz-card" style="text-align: center;">
             <ngx-loading [show]="loading"></ngx-loading>
-        
             <div *ngIf="watingForUsers">
                 <mat-card-title>
                     <h4>{{waitingMessage}}</h4>
                 </mat-card-title>
             </div>
-            <div *ngIf="currentQuestion != undefined">       
+            <div *ngIf="currentQuestion != undefined">
                 <mat-card-title>
                     <h3>{{currentQuestion.question}}</h3>
                 </mat-card-title>
                 <div *ngFor="let possibleAnswer of currentQuestion.possibleAnswers">
-                    <button mat-flat-button color="accent">
+                    <button mat-flat-button color="accent" [disabled]="!buttonsAreEnabled">
                         {{possibleAnswer}}
                     </button>
                     <br>
                     <br>
                 </div>
                 <mat-card-footer>
-                    <div style="text-align: right;">                        
-                        <img src="{{getUserOfQuestionPhoto(currentQuestion.createdByUser)}}" class="created-user-photo">
-                    </div>
-        
+                    <mat-grid-list cols="2" rowHeight="200px" >
+                        <mat-grid-tile>
+                            <div style="text-align: left;">
+                                <mat-progress-spinner [mode]="spinnerMode" diameter="60" [color]="spinnerColor" [value]="proportionalTimeLeft"></mat-progress-spinner>
+                            </div>
+                        </mat-grid-tile>
+                        <mat-grid-tile>
+                            <div style="text-align: left;">
+                                <img src="{{getUserOfQuestionPhoto(currentQuestion.createdByUser)}}" class="created-user-photo">
+                            </div>
+                        </mat-grid-tile>
+                    </mat-grid-list>
+                    
+                  
                 </mat-card-footer>
             </div>
         </mat-card>

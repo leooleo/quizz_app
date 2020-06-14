@@ -83,6 +83,19 @@ app.get('/*', function (req, res) {
 server.listen(port, function () {
     console.log('App is listening');
 });
+function calculateElapsedTime(timeLeft, totalTime) {
+    if (timeLeft <= 0) {
+        //prepare for right and wrong answers
+        wsServer.sockets.emit('timer', 0);
+        return;
+    }
+    ;
+    var proportionalTimeLeft = (timeLeft / totalTime) * 100;
+    wsServer.sockets.emit('timer', proportionalTimeLeft);
+    setTimeout(function () {
+        calculateElapsedTime(timeLeft - 1, totalTime);
+    }, 1000);
+}
 //TODO: mock only!
 usersQuestions = question_model_1.getMockQuestions();
 var numberOfClients = 0;
@@ -105,6 +118,7 @@ wsServer.on('connection', function (socket) {
         if (!notifiedClientsOfQuestion) {
             wsServer.sockets.emit('currentQuestion', quizzQuestion);
             notifiedClientsOfQuestion = true;
+            calculateElapsedTime(15, 15);
         }
         else {
             socket.emit('currentQuestion', quizzQuestion);

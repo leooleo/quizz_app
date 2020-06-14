@@ -22,6 +22,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatGridListModule } from '@angular/material/grid-list';
 
 const config: SocketIoConfig = { url: environment.serverUrl, options: {} };
 
@@ -51,6 +53,8 @@ const config: SocketIoConfig = { url: environment.serverUrl, options: {} };
     MatSnackBarModule,
     MatRadioModule,
     MatSidenavModule,
+    MatProgressSpinnerModule,
+    MatGridListModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

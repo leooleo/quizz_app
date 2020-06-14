@@ -6,10 +6,12 @@ import { UserModel } from '../user-model';
 import { QuestionQuizzModel } from '../question-quizz-model';
 import { ApiService } from '../api.service';
 import { environment } from 'src/environments/environment';
+import { ProgressSpinnerMode } from '@angular/material/progress-spinner';
+import { ThemePalette } from '@angular/material/core';
 
 @Component({
   templateUrl: './quizz.component.html',
-  styleUrls: ['./quizz.component.css', '../question-maker/question-maker.component.css',  '../app.component.css',]
+  styleUrls: ['./quizz.component.css', '../question-maker/question-maker.component.css', '../app.component.css',]
 })
 export class QuizzComponent implements OnInit {
   user: UserModel;
@@ -18,7 +20,12 @@ export class QuizzComponent implements OnInit {
   loading: boolean;
   loadingUsers: boolean;
   currentQuestion: QuestionQuizzModel;
+  proportionalTimeLeft: number;
   users: UserModel[];
+  spinnerMode: ProgressSpinnerMode = "determinate";
+  spinnerColor: ThemePalette = 'primary';
+  buttonsAreEnabled: boolean;
+
   constructor(private socket: Socket, private loginService: LoginService, private router: Router, private apiService: ApiService) { }
 
   ngOnInit(): void {
@@ -68,9 +75,21 @@ export class QuizzComponent implements OnInit {
     this.socket.fromEvent('currentQuestion').subscribe((data: QuestionQuizzModel) => {
       this.watingForUsers = false;
       this.loading = false;
+      this.buttonsAreEnabled = true;
+      this.spinnerColor = 'primary';
       console.log('Current question');
       console.log(data);
       this.currentQuestion = data;
+    });
+
+    this.socket.fromEvent('timer').subscribe((data: number) => {
+      this.proportionalTimeLeft = data;
+      if(data <= 45) {
+        this.spinnerColor ='warn';
+      }
+      if(data == 0) {
+        this.buttonsAreEnabled = false;
+      }
     });
   }
 
