@@ -33,22 +33,22 @@ export function getMockQuestions(): Array<QuestionModel> {
             '1'
         ),
         new QuestionModel(
-            'Quem sou eu?',
+            'Qual meu nome?',
             'Bonfa',
-            ['Bonfa', 'Bonfa', 'Bonfa'],
+            ['Bonfim', 'errado 1', 'errado 2'],
             '1'
         ),
         new QuestionModel(
-            'Quem sou eu?',
+            'Qual meu nome?',
             'Bonfa',
-            ['Bonfa', 'Bonfa', 'Bonfa'],
+            ['Bonfim', 'errado 1', 'errado 2'],
             '1'
         ),
         new QuestionModel(
-            'Quem sou eu?',
+            'Qual meu nome?',
             'Bonfa',
-            ['Bonfa', 'Bonfa', 'Bonfa'],
+            ['Bonfim', 'errado 1', 'errado 2'],
             '1'
-        ),        
+        ),
     )
 }

@@ -9,6 +9,7 @@ var path = require("path");
 var cors = require("cors");
 var fs = require("fs");
 var quizz_question_model_1 = require("./quizz_question_model");
+var score_model_1 = require("./score_model");
 var port = process.env.PORT || 8080;
 var app = express();
 var server = http.createServer(app);
@@ -83,10 +84,23 @@ app.get('/*', function (req, res) {
 server.listen(port, function () {
     console.log('App is listening');
 });
+function finnishCurrentRound() {
+    var users = initialUsers;
+    decreaseIdleUsers();
+    var scoreModel = new score_model_1.ScoreModel(users, winners, loosers);
+    wsServer.sockets.emit('score', scoreModel);
+    winners = new Array();
+    loosers = new Array();
+    setTimeout(function () {
+        currentQuestion = usersQuestions.pop();
+        wsServer.sockets.emit('currentQuestion', currentQuestion);
+        calculateElapsedTime(15, 15);
+    }, 10000);
+}
 function calculateElapsedTime(timeLeft, totalTime) {
     if (timeLeft <= 0) {
-        //prepare for right and wrong answers
         wsServer.sockets.emit('timer', 0);
+        finnishCurrentRound();
         return;
     }
     ;
@@ -96,15 +110,40 @@ function calculateElapsedTime(timeLeft, totalTime) {
         calculateElapsedTime(timeLeft - 1, totalTime);
     }, 1000);
 }
+function initializeQuizz(socket) {
+    quizzIsRunning = true;
+    currentQuestion = usersQuestions.pop();
+    var quizzQuestion = new quizz_question_model_1.QuizzQuestionModel(currentQuestion);
+    if (!notifiedClientsOfQuestion) {
+        wsServer.sockets.emit('currentQuestion', quizzQuestion);
+        notifiedClientsOfQuestion = true;
+        calculateElapsedTime(15, 15);
+    }
+    else {
+        socket.emit('currentQuestion', quizzQuestion);
+    }
+}
 //TODO: mock only!
 usersQuestions = question_model_1.getMockQuestions();
 var numberOfClients = 0;
 var notifiedClientsOfQuestion = false;
+var currentQuestion;
+var quizzIsRunning = false;
+var winners = new Array();
+var loosers = new Array();
 wsServer.on('connection', function (socket) {
     socket.on('disconnect', function () {
         if (numberOfClients > 0) {
             numberOfClients -= 1;
             console.log("connected " + numberOfClients + " of " + initialUsers.length);
+        }
+    });
+    socket.on('answer', function (answerModel) {
+        if (answerModel.answer == currentQuestion.correctAnswer) {
+            increaseUserScore(answerModel.userName);
+        }
+        else {
+            decreaseUserScore(answerModel.userName);
         }
     });
     numberOfClients += 1;
@@ -113,18 +152,31 @@ wsServer.on('connection', function (socket) {
         socket.emit('waiting', "Aguardando " + (initialUsers.length - numberOfClients) + " usu\u00E1rio(s) se conectar(em)");
     }
     else {
-        var currentQuestion = usersQuestions[0];
-        var quizzQuestion = new quizz_question_model_1.QuizzQuestionModel(currentQuestion);
-        if (!notifiedClientsOfQuestion) {
-            wsServer.sockets.emit('currentQuestion', quizzQuestion);
-            notifiedClientsOfQuestion = true;
-            calculateElapsedTime(15, 15);
-        }
-        else {
-            socket.emit('currentQuestion', quizzQuestion);
-        }
+        if (!quizzIsRunning)
+            initializeQuizz(socket);
+        else
+            socket.emit('currentQuestion', currentQuestion);
     }
 });
+function decreaseIdleUsers() {
+    var idleUsers = initialUsers.filter(function (user) { return !winners.includes(user.name) && !loosers.includes(user.name); });
+    console.log(idleUsers);
+    idleUsers.forEach(function (user) { return decreaseUserScore(user.name); });
+}
+function increaseUserScore(userName) {
+    winners.push(userName);
+    initialUsers.map(function (u) {
+        if (u.name == userName)
+            u.score += 1;
+    });
+}
+function decreaseUserScore(userName) {
+    loosers.push(userName);
+    initialUsers.map(function (u) {
+        if (u.name == userName)
+            u.score -= 0.5;
+    });
+}
 function setUserAnswered(userName) {
     initialUsers.map(function (u) {
         if (u.name == userName)

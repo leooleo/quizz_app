@@ -29,7 +29,7 @@
                     <h3>{{currentQuestion.question}}</h3>
                 </mat-card-title>
                 <div *ngFor="let possibleAnswer of currentQuestion.possibleAnswers">
-                    <button mat-flat-button color="accent" [disabled]="!buttonsAreEnabled">
+                    <button mat-flat-button color="accent" [disabled]="!buttonsAreEnabled" (click)="onAnswer(possibleAnswer)">
                         {{possibleAnswer}}
                     </button>
                     <br>

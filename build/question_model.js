@@ -12,6 +12,6 @@ var QuestionModel = /** @class */ (function () {
 }());
 exports.QuestionModel = QuestionModel;
 function getMockQuestions() {
-    return new Array(new QuestionModel('Qual meu nome inteiro?', 'Léo', ['Léo Moraes da Silva', 'Méo Loraes', 'Xeo Moraes'], '1'), new QuestionModel('Quem sou eu?', 'Léo', ['Léo', 'Léo', 'Léo'], '1'), new QuestionModel('Quem sou eu?', 'Léo', ['Léo', 'Léo', 'Léo'], '1'), new QuestionModel('Quem sou eu?', 'Bonfa', ['Bonfa', 'Bonfa', 'Bonfa'], '1'), new QuestionModel('Quem sou eu?', 'Bonfa', ['Bonfa', 'Bonfa', 'Bonfa'], '1'), new QuestionModel('Quem sou eu?', 'Bonfa', ['Bonfa', 'Bonfa', 'Bonfa'], '1'));
+    return new Array(new QuestionModel('Qual meu nome inteiro?', 'Léo', ['Léo Moraes da Silva', 'Méo Loraes', 'Xeo Moraes'], '1'), new QuestionModel('Quem sou eu?', 'Léo', ['Léo', 'Léo', 'Léo'], '1'), new QuestionModel('Quem sou eu?', 'Léo', ['Léo', 'Léo', 'Léo'], '1'), new QuestionModel('Qual meu nome?', 'Bonfa', ['Bonfim', 'errado 1', 'errado 2'], '1'), new QuestionModel('Qual meu nome?', 'Bonfa', ['Bonfim', 'errado 1', 'errado 2'], '1'), new QuestionModel('Qual meu nome?', 'Bonfa', ['Bonfim', 'errado 1', 'errado 2'], '1'));
 }
 exports.getMockQuestions = getMockQuestions;

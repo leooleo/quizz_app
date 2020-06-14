@@ -8,6 +8,9 @@ import { ApiService } from '../api.service';
 import { environment } from 'src/environments/environment';
 import { ProgressSpinnerMode } from '@angular/material/progress-spinner';
 import { ThemePalette } from '@angular/material/core';
+import { ScoreModel } from '../score-model';
+import { AnswerModel } from '../answer-model';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   templateUrl: './quizz.component.html',
@@ -26,7 +29,8 @@ export class QuizzComponent implements OnInit {
   spinnerColor: ThemePalette = 'primary';
   buttonsAreEnabled: boolean;
 
-  constructor(private socket: Socket, private loginService: LoginService, private router: Router, private apiService: ApiService) { }
+  constructor(private socket: Socket, private loginService: LoginService,
+    private router: Router, private apiService: ApiService, private snackBar: MatSnackBar) { }
 
   ngOnInit(): void {
     this.user = this.loginService.getStoredUser();
@@ -64,6 +68,18 @@ export class QuizzComponent implements OnInit {
     return `${environment.serverUrl}/api/photo/${userName}`;
   }
 
+  onAnswer(answer: string) {
+    var answerIndex = this.currentQuestion.possibleAnswers.indexOf(answer) + 1;
+    var answerModel = new AnswerModel(this.user.name, answerIndex.toString());
+    this.buttonsAreEnabled = false;
+    this.sendAnswer(answerModel);
+    this.snackBar.open('Resposta enviada com sucesso', 'Ok', {duration: 3000});
+  }
+
+  private sendAnswer(answer: AnswerModel) {
+    this.socket.emit('answer', answer);
+  }
+
   private initializeEvents() {
     this.socket.fromEvent('waiting').subscribe((data: string) => {
       this.loading = false;
@@ -84,12 +100,17 @@ export class QuizzComponent implements OnInit {
 
     this.socket.fromEvent('timer').subscribe((data: number) => {
       this.proportionalTimeLeft = data;
-      if(data <= 45) {
-        this.spinnerColor ='warn';
+      if (data <= 45) {
+        this.spinnerColor = 'warn';
       }
-      if(data == 0) {
+      if (data == 0) {
         this.buttonsAreEnabled = false;
       }
+    });
+
+    this.socket.fromEvent('score').subscribe((data: ScoreModel) => {
+      this.users = data.users;
+      console.log(data);
     });
   }
 
