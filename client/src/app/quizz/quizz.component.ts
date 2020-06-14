@@ -30,6 +30,7 @@ export class QuizzComponent implements OnInit {
   spinnerMode: ProgressSpinnerMode = "determinate";
   spinnerColor: ThemePalette = 'primary';
   buttonsAreEnabled: boolean;
+  quizzWinners: Array<UserModel>;
 
   constructor(private socket: Socket, private loginService: LoginService,
     private router: Router, private apiService: ApiService, private snackBar: MatSnackBar, private dialog: MatDialog) { }
@@ -60,7 +61,7 @@ export class QuizzComponent implements OnInit {
       if (this.user == undefined) {
         this.router.navigate(['/login']);
       }
-      else if (this.user.hasAnswered) {
+      else if (!this.user.hasAnswered) {
         this.router.navigate(['/question']);
       }
     }
@@ -75,7 +76,7 @@ export class QuizzComponent implements OnInit {
     var answerModel = new AnswerModel(this.user.name, answerIndex.toString());
     this.buttonsAreEnabled = false;
     this.sendAnswer(answerModel);
-    this.snackBar.open('Resposta enviada com sucesso', 'Ok', {duration: 3000});
+    this.snackBar.open('Resposta enviada com sucesso', 'Ok', { duration: 3000 });
   }
 
   private sendAnswer(answer: AnswerModel) {
@@ -116,9 +117,11 @@ export class QuizzComponent implements OnInit {
 
       score.winnners = score.winnners.map((user) => this.getUserOfQuestionPhoto(user));
       score.loosers = score.loosers.map((user) => this.getUserOfQuestionPhoto(user));
-      this.dialog.open(RoundEndDialogComponent, {data: score});
+      this.dialog.open(RoundEndDialogComponent, { data: score });
+    });
+
+    this.socket.fromEvent('winner').subscribe((winners: Array<UserModel>) => {
+      this.quizzWinners = winners;
     });
   }
-
-
 }

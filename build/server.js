@@ -1,7 +1,6 @@
 "use strict";
 exports.__esModule = true;
 var user_model_1 = require("./user_model");
-var question_model_1 = require("./question_model");
 var socketIo = require("socket.io");
 var express = require("express");
 var http = require("http");
@@ -98,8 +97,8 @@ function finnishCurrentRound() {
             calculateElapsedTime(15, 15);
         }
         else {
-            //TODO: implement winner logic
-            // wsServer.sockets.emit('winner', )
+            var winners = getQuizzWinners();
+            wsServer.sockets.emit('winner', winners);
         }
     }, 10000);
 }
@@ -130,7 +129,7 @@ function initializeQuizz(socket) {
     }
 }
 //TODO: mock only!
-usersQuestions = question_model_1.getMockQuestions();
+// usersQuestions = getMockQuestions();
 var numberOfClients = 0;
 var notifiedClientsOfQuestion = false;
 var currentQuestion;
@@ -187,6 +186,14 @@ function setUserAnswered(userName) {
         if (u.name == userName)
             u.hasAnswered = true;
     });
+}
+function getQuizzWinners() {
+    var highestScore = Number.MIN_SAFE_INTEGER;
+    initialUsers.forEach(function (user) {
+        if (user.score > highestScore)
+            highestScore = user.score;
+    });
+    return initialUsers.filter(function (user) { return user.score == highestScore; });
 }
 function sortUsers() {
     initialUsers.sort(function (a, b) {

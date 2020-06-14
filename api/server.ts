@@ -113,8 +113,8 @@ function finnishCurrentRound() {
             calculateElapsedTime(15, 15);
         }
         else {
-            //TODO: implement winner logic
-            // wsServer.sockets.emit('winner', )
+            var winners = getQuizzWinners();
+            wsServer.sockets.emit('winner', winners);
         }
     }, 10000);
 }
@@ -147,7 +147,7 @@ function initializeQuizz(socket: SocketIO.Socket) {
 }
 
 //TODO: mock only!
-usersQuestions = getMockQuestions();
+// usersQuestions = getMockQuestions();
 var numberOfClients: number = 0;
 var notifiedClientsOfQuestion: boolean = false;
 var currentQuestion: QuestionModel;
@@ -209,10 +209,18 @@ function setUserAnswered(userName: string) {
     });
 }
 
+function getQuizzWinners(): Array<UserModel> {
+    var highestScore = Number.MIN_SAFE_INTEGER;
+    initialUsers.forEach((user) => {
+        if (user.score > highestScore) highestScore = user.score;
+    });
+    return initialUsers.filter((user) => user.score == highestScore);
+}
+
 function sortUsers() {
     initialUsers.sort((a, b) => {
-        if(a.score < b.score) return 1;
-        if(a.score > b.score) return -1;
+        if (a.score < b.score) return 1;
+        if (a.score > b.score) return -1;
         return 0;
     });
 }

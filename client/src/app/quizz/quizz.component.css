@@ -19,3 +19,12 @@
 .user-score-tile {
     margin-top: 10px;
 }
+
+.winner-image {
+    height: 200px;
+    width: auto;
+}
+
+.border-circular{
+    border-radius: 50%;
+}

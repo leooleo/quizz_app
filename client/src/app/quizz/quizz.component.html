@@ -17,44 +17,71 @@
         </div>
     </mat-sidenav>
     <mat-sidenav-content style="background-color: #e8e8e8;">
-        <mat-card class="quizz-card" style="text-align: center;">
-            <ngx-loading [show]="loading"></ngx-loading>
-            <div *ngIf="watingForUsers">
-                <mat-card-title>
-                    <h4>{{waitingMessage}}</h4>
-                </mat-card-title>
+        <div *ngIf="quizzWinners != undefined; else OnGoingQuizz">
+            <div *ngIf="quizzWinners.length == 1;">
+                <mat-card style="text-align: center;">
+                    <mat-card-title>
+                        Vencedor: {{quizzWinners[0].name}}
+                    </mat-card-title>
+                    <mat-card-content>
+                        <img src="{{quizzWinners[0].photoUrl}}" class="winner-image border-circular">
+                    </mat-card-content>
+                </mat-card>
             </div>
-            <div *ngIf="currentQuestion != undefined">
-                <mat-card-title>
-                    <h3>{{currentQuestion.question}}</h3>
-                </mat-card-title>
-                <div *ngFor="let possibleAnswer of currentQuestion.possibleAnswers">
-                    <button mat-flat-button color="accent" [disabled]="!buttonsAreEnabled"
-                        (click)="onAnswer(possibleAnswer)">
-                        {{possibleAnswer}}
-                    </button>
-                    <br>
-                    <br>
+            <div *ngIf="quizzWinners.length > 1;">
+                <mat-card style="text-align: center;">
+                    <mat-card-title>
+                        Vencedores: <span *ngFor="let user of quizzWinners"
+                            style="margin-right: 10px;">{{user.name}}</span>
+                    </mat-card-title>
+                    <mat-card-content>
+                        <mat-grid-list cols="2" rowHeight="2:1">
+                            <mat-grid-tile *ngFor="let user of quizzWinners">
+                                <img src="{{user.photoUrl}}">
+                            </mat-grid-tile>
+                        </mat-grid-list>
+                    </mat-card-content>
+                </mat-card>
+            </div>
+        </div>
+        <ng-template #OnGoingQuizz>
+            <mat-card class="quizz-card" style="text-align: center;">
+                <ngx-loading [show]="loading"></ngx-loading>
+                <div *ngIf="watingForUsers">
+                    <mat-card-title>
+                        <h4>{{waitingMessage}}</h4>
+                    </mat-card-title>
                 </div>
-                <mat-card-footer>
-                    <mat-grid-list cols="2" rowHeight="200px">
-                        <mat-grid-tile>
-                            <div style="text-align: left;">
-                                <mat-progress-spinner [mode]="spinnerMode" diameter="60" [color]="spinnerColor"
-                                    [value]="proportionalTimeLeft"></mat-progress-spinner>
-                            </div>
-                        </mat-grid-tile>
-                        <mat-grid-tile>
-                            <div style="text-align: left;">
-                                <img src="{{getUserOfQuestionPhoto(currentQuestion.createdByUser)}}"
-                                    class="created-user-photo">
-                            </div>
-                        </mat-grid-tile>
-                    </mat-grid-list>
-
-
-                </mat-card-footer>
-            </div>
-        </mat-card>
+                <div *ngIf="currentQuestion != undefined">
+                    <mat-card-title>
+                        <h3>{{currentQuestion.question}}</h3>
+                    </mat-card-title>
+                    <div *ngFor="let possibleAnswer of currentQuestion.possibleAnswers">
+                        <button mat-flat-button color="accent" [disabled]="!buttonsAreEnabled"
+                            (click)="onAnswer(possibleAnswer)">
+                            {{possibleAnswer}}
+                        </button>
+                        <br>
+                        <br>
+                    </div>
+                    <mat-card-footer>
+                        <mat-grid-list cols="2" rowHeight="200px">
+                            <mat-grid-tile>
+                                <div style="text-align: left;">
+                                    <mat-progress-spinner [mode]="spinnerMode" diameter="60" [color]="spinnerColor"
+                                        [value]="proportionalTimeLeft"></mat-progress-spinner>
+                                </div>
+                            </mat-grid-tile>
+                            <mat-grid-tile>
+                                <div style="text-align: left;">
+                                    <img src="{{getUserOfQuestionPhoto(currentQuestion.createdByUser)}}"
+                                        class="created-user-photo">
+                                </div>
+                            </mat-grid-tile>
+                        </mat-grid-list>
+                    </mat-card-footer>
+                </div>
+            </mat-card>
+        </ng-template>
     </mat-sidenav-content>
 </mat-sidenav-container>
