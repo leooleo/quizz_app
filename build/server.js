@@ -21,6 +21,21 @@ app.use(express.static(staticDirectory));
 app.use(express.static(clientBuildDirectory));
 app.use(express.json());
 app.use(cors());
+app.get('/api/restart', function (req, res) {
+    initialUsers = user_model_1.getInitialUserList(port === 8080);
+    usersQuestions = Array();
+    numberOfClients = 0;
+    notifiedClientsOfQuestion = false;
+    currentQuestion;
+    quizzIsRunning = false;
+    winners = new Array();
+    loosers = new Array();
+    res.send('Ok!');
+});
+app.get('api/start-quizz', function (req, res) {
+    initializeQuizz(null);
+    res.send('Ok!');
+});
 app.get('/api/photo/:name', function (req, res) {
     var userName = req.params.name;
     var photos = fs.readdirSync(staticDirectory);

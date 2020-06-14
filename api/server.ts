@@ -15,7 +15,7 @@ const app: express.Application = express();
 const server = http.createServer(app);
 const wsServer = socketIo(server);
 
-const initialUsers: Array<UserModel> = getInitialUserList(port === 8080);
+var initialUsers: Array<UserModel> = getInitialUserList(port === 8080);
 const staticDirectory: string = path.join(__dirname + '/../assets/');
 const clientBuildDirectory: string = path.join(__dirname + '/../client/build/');
 var usersQuestions: Array<QuestionModel> = Array<QuestionModel>();
@@ -24,6 +24,23 @@ app.use(express.static(staticDirectory));
 app.use(express.static(clientBuildDirectory));
 app.use(express.json());
 app.use(cors());
+
+app.get('/api/restart', function (req, res) {
+    initialUsers = getInitialUserList(port === 8080);
+    usersQuestions = Array<QuestionModel>();
+    numberOfClients = 0;
+    notifiedClientsOfQuestion = false;
+    currentQuestion;
+    quizzIsRunning = false;
+    winners = new Array<string>();
+    loosers = new Array<string>();
+    res.send('Ok!');
+});
+
+app.get('api/start-quizz', function (req, res) {
+    initializeQuizz(null);
+    res.send('Ok!');
+});
 
 app.get('/api/photo/:name', function (req, res) {
     var userName: string = req.params.name;

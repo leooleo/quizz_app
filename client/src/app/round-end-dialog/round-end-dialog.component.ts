@@ -14,5 +14,4 @@ export class RoundEndDialogComponent implements OnInit {
     console.log('data');
     console.log(this.data);
   }
-
 }
