@@ -85,9 +85,9 @@ server.listen(port, function () {
     console.log('App is listening');
 });
 function finnishCurrentRound() {
-    var users = initialUsers;
+    sortUsers();
     decreaseIdleUsers();
-    var scoreModel = new score_model_1.ScoreModel(users, winners, loosers);
+    var scoreModel = new score_model_1.ScoreModel(initialUsers, winners, loosers);
     wsServer.sockets.emit('score', scoreModel);
     winners = new Array();
     loosers = new Array();
@@ -186,5 +186,14 @@ function setUserAnswered(userName) {
     initialUsers.map(function (u) {
         if (u.name == userName)
             u.hasAnswered = true;
+    });
+}
+function sortUsers() {
+    initialUsers.sort(function (a, b) {
+        if (a.score < b.score)
+            return 1;
+        if (a.score > b.score)
+            return -1;
+        return 0;
     });
 }

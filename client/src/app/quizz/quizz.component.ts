@@ -91,6 +91,7 @@ export class QuizzComponent implements OnInit {
     });
 
     this.socket.fromEvent('currentQuestion').subscribe((data: QuestionQuizzModel) => {
+      this.dialog.closeAll();
       this.watingForUsers = false;
       this.loading = false;
       this.buttonsAreEnabled = true;
@@ -114,6 +115,7 @@ export class QuizzComponent implements OnInit {
       this.users = score.users;
 
       score.winnners = score.winnners.map((user) => this.getUserOfQuestionPhoto(user));
+      score.loosers = score.loosers.map((user) => this.getUserOfQuestionPhoto(user));
       this.dialog.open(RoundEndDialogComponent, {data: score});
     });
   }

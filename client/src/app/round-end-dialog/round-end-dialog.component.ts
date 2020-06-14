@@ -7,8 +7,8 @@ import { ScoreModel } from '../score-model';
   templateUrl: './round-end-dialog.component.html',
   styleUrls: ['./round-end-dialog.component.css', '../app.component.css']
 })
-export class RoundEndDialogComponent implements OnInit {  
-  constructor(@Inject(MAT_DIALOG_DATA) public data: any) { }
+export class RoundEndDialogComponent implements OnInit {
+  constructor(@Inject(MAT_DIALOG_DATA) public data: ScoreModel) { }
 
   ngOnInit(): void {
     console.log('data');

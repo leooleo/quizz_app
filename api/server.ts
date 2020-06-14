@@ -100,14 +100,14 @@ server.listen(port, function () {
 });
 
 function finnishCurrentRound() {
-    var users = initialUsers;
+    sortUsers();
     decreaseIdleUsers();
-    var scoreModel = new ScoreModel(users, winners, loosers);
+    var scoreModel = new ScoreModel(initialUsers, winners, loosers);
     wsServer.sockets.emit('score', scoreModel);
     winners = new Array<string>();
     loosers = new Array<string>();
     setTimeout(() => {
-        if(usersQuestions.length != 0) {
+        if (usersQuestions.length != 0) {
             currentQuestion = usersQuestions.pop();
             wsServer.sockets.emit('currentQuestion', currentQuestion);
             calculateElapsedTime(15, 15);
@@ -116,8 +116,6 @@ function finnishCurrentRound() {
             //TODO: implement winner logic
             // wsServer.sockets.emit('winner', )
         }
-
-        
     }, 10000);
 }
 
@@ -208,5 +206,13 @@ function decreaseUserScore(userName: string) {
 function setUserAnswered(userName: string) {
     initialUsers.map((u: UserModel) => {
         if (u.name == userName) u.hasAnswered = true;
+    });
+}
+
+function sortUsers() {
+    initialUsers.sort((a, b) => {
+        if(a.score < b.score) return 1;
+        if(a.score > b.score) return -1;
+        return 0;
     });
 }
