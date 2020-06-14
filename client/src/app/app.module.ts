@@ -26,6 +26,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatDialogModule } from '@angular/material/dialog';
 import { LoginWarningDialogComponent } from './login-warning-dialog/login-warning-dialog.component';
+import { RoundEndDialogComponent } from './round-end-dialog/round-end-dialog.component';
 
 const config: SocketIoConfig = { url: environment.serverUrl, options: {} };
 
@@ -35,7 +36,8 @@ const config: SocketIoConfig = { url: environment.serverUrl, options: {} };
     LoginPageComponent,
     QuestionMakerComponent,
     QuizzComponent,
-    LoginWarningDialogComponent
+    LoginWarningDialogComponent,
+    RoundEndDialogComponent
   ],
   imports: [
     BrowserModule,

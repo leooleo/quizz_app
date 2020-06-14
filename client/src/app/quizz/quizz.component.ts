@@ -11,6 +11,8 @@ import { ThemePalette } from '@angular/material/core';
 import { ScoreModel } from '../score-model';
 import { AnswerModel } from '../answer-model';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatDialog } from '@angular/material/dialog';
+import { RoundEndDialogComponent } from '../round-end-dialog/round-end-dialog.component';
 
 @Component({
   templateUrl: './quizz.component.html',
@@ -30,7 +32,7 @@ export class QuizzComponent implements OnInit {
   buttonsAreEnabled: boolean;
 
   constructor(private socket: Socket, private loginService: LoginService,
-    private router: Router, private apiService: ApiService, private snackBar: MatSnackBar) { }
+    private router: Router, private apiService: ApiService, private snackBar: MatSnackBar, private dialog: MatDialog) { }
 
   ngOnInit(): void {
     this.user = this.loginService.getStoredUser();
@@ -108,9 +110,11 @@ export class QuizzComponent implements OnInit {
       }
     });
 
-    this.socket.fromEvent('score').subscribe((data: ScoreModel) => {
-      this.users = data.users;
-      console.log(data);
+    this.socket.fromEvent('score').subscribe((score: ScoreModel) => {
+      this.users = score.users;
+
+      score.winnners = score.winnners.map((user) => this.getUserOfQuestionPhoto(user));
+      this.dialog.open(RoundEndDialogComponent, {data: score});
     });
   }
 

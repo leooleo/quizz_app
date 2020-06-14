@@ -107,9 +107,17 @@ function finnishCurrentRound() {
     winners = new Array<string>();
     loosers = new Array<string>();
     setTimeout(() => {
-        currentQuestion = usersQuestions.pop();
-        wsServer.sockets.emit('currentQuestion', currentQuestion);
-        calculateElapsedTime(15, 15);
+        if(usersQuestions.length != 0) {
+            currentQuestion = usersQuestions.pop();
+            wsServer.sockets.emit('currentQuestion', currentQuestion);
+            calculateElapsedTime(15, 15);
+        }
+        else {
+            //TODO: implement winner logic
+            // wsServer.sockets.emit('winner', )
+        }
+
+        
     }, 10000);
 }
 

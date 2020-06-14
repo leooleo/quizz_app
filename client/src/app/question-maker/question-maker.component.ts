@@ -85,7 +85,7 @@ export class QuestionMakerComponent implements OnInit {
   }
 
   private validateUser() {
-    if (this.user == undefined) {      
+    if (this.user == undefined) {
       this.router.navigate(['/login']);
     }
     else if (this.user.hasAnswered) {
