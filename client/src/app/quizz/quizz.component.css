@@ -1,0 +1,30 @@
+.quizz-card {
+    width: 50%;
+    margin: 2.5vh auto;
+    height: auto;
+}
+
+.created-user-photo {
+    width: 75px;
+    height: 75px;
+    border-radius: 50%;
+    margin-right: 5px;
+}
+
+.score-title {
+    font-size: 10rem;
+    color: white;
+}
+
+.user-score-tile {
+    margin-top: 10px;
+}
+
+.winner-image {
+    height: 200px;
+    width: auto;
+}
+
+.border-circular{
+    border-radius: 50%;
+}

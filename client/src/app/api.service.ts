@@ -5,6 +5,7 @@ import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { QuestionModel } from './question-model';
 import { ServerResponse } from './server-response';
+import { AnswerModel } from './answer-model';
 
 @Injectable({
   providedIn: 'root'

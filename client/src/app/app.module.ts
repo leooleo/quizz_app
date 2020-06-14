@@ -18,9 +18,15 @@ import { SocketIoModule, SocketIoConfig } from 'ngx-socket-io';
 import { environment } from 'src/environments/environment';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import {FormsModule, ReactiveFormsModule} from '@angular/forms';
-import {MatSnackBarModule} from '@angular/material/snack-bar';
-import {MatRadioModule} from '@angular/material/radio';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatRadioModule } from '@angular/material/radio';
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatGridListModule } from '@angular/material/grid-list';
+import { MatDialogModule } from '@angular/material/dialog';
+import { LoginWarningDialogComponent } from './login-warning-dialog/login-warning-dialog.component';
+import { RoundEndDialogComponent } from './round-end-dialog/round-end-dialog.component';
 
 const config: SocketIoConfig = { url: environment.serverUrl, options: {} };
 
@@ -29,7 +35,9 @@ const config: SocketIoConfig = { url: environment.serverUrl, options: {} };
     AppComponent,
     LoginPageComponent,
     QuestionMakerComponent,
-    QuizzComponent
+    QuizzComponent,
+    LoginWarningDialogComponent,
+    RoundEndDialogComponent
   ],
   imports: [
     BrowserModule,
@@ -48,7 +56,11 @@ const config: SocketIoConfig = { url: environment.serverUrl, options: {} };
     FormsModule,
     ReactiveFormsModule,
     MatSnackBarModule,
-    MatRadioModule
+    MatRadioModule,
+    MatSidenavModule,
+    MatProgressSpinnerModule,
+    MatGridListModule,
+    MatDialogModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

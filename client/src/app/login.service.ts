@@ -5,7 +5,19 @@ import { UserModel } from './user-model';
   providedIn: 'root'
 })
 export class LoginService {
-  public loggedUser: UserModel;
-  
   constructor() { }
+
+  storeUser(user: UserModel) {
+    localStorage.setItem('user', JSON.stringify(user));
+    var st = JSON.parse(localStorage.getItem('user'));
+    console.log('Storing user:');
+    console.log(st);
+  }
+
+  getStoredUser(): UserModel {
+    var user = JSON.parse(localStorage.getItem('user'));
+    console.log('Getting user:');
+    console.log(user);
+    return user;
+  }
 }

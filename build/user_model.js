@@ -13,7 +13,9 @@ var UserModel = /** @class */ (function () {
 }());
 exports.UserModel = UserModel;
 function getInitialUserList(isLocal) {
-    var userList = new Array(new UserModel('Léo', 0, false, false, isLocal), new UserModel('Nat', 0, false, false, isLocal), new UserModel('Bonfa', 0, false, false, isLocal), new UserModel('Mr.Doctor', 0, false, false, isLocal), new UserModel('Ernestão', 0, false, false, isLocal), new UserModel('Loris', 0, false, false, isLocal));
+    var userList = new Array(new UserModel('Léo', 0, false, false, isLocal), 
+    // new UserModel('Nat', 0, false, false, isLocal),
+    new UserModel('Bonfa', 0, false, false, isLocal));
     return userList;
 }
 exports.getInitialUserList = getInitialUserList;
