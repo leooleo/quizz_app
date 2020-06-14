@@ -1,0 +1,9 @@
+<h1 mat-dialog-title>Aviso</h1>
+<div mat-dialog-content>
+  <p>Você já está logado(a) como '{{user.name}}'</p>
+  <p>Realmente deseja trocar de usuário?</p>
+</div>
+<div mat-dialog-actions>
+  <button mat-button cdkFocusInitial [mat-dialog-close]="true" color="primary">Não</button>
+  <button mat-button [mat-dialog-close]="false" color="warn">Sim</button>
+</div>

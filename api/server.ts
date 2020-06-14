@@ -180,7 +180,6 @@ wsServer.on('connection', (socket) => {
 
 function decreaseIdleUsers() {
     var idleUsers = initialUsers.filter((user) => !winners.includes(user.name) && !loosers.includes(user.name));
-    console.log(idleUsers);
     idleUsers.forEach((user) => decreaseUserScore(user.name));
 }
 
@@ -198,7 +197,7 @@ function decreaseUserScore(userName: string) {
     });
 }
 
-function setUserAnswered(userName: string) {    
+function setUserAnswered(userName: string) {
     initialUsers.map((u: UserModel) => {
         if (u.name == userName) u.hasAnswered = true;
     });

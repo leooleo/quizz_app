@@ -160,7 +160,6 @@ wsServer.on('connection', function (socket) {
 });
 function decreaseIdleUsers() {
     var idleUsers = initialUsers.filter(function (user) { return !winners.includes(user.name) && !loosers.includes(user.name); });
-    console.log(idleUsers);
     idleUsers.forEach(function (user) { return decreaseUserScore(user.name); });
 }
 function increaseUserScore(userName) {

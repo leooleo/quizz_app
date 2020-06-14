@@ -24,6 +24,8 @@ import { MatRadioModule } from '@angular/material/radio';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatGridListModule } from '@angular/material/grid-list';
+import { MatDialogModule } from '@angular/material/dialog';
+import { LoginWarningDialogComponent } from './login-warning-dialog/login-warning-dialog.component';
 
 const config: SocketIoConfig = { url: environment.serverUrl, options: {} };
 
@@ -32,7 +34,8 @@ const config: SocketIoConfig = { url: environment.serverUrl, options: {} };
     AppComponent,
     LoginPageComponent,
     QuestionMakerComponent,
-    QuizzComponent
+    QuizzComponent,
+    LoginWarningDialogComponent
   ],
   imports: [
     BrowserModule,
@@ -55,6 +58,7 @@ const config: SocketIoConfig = { url: environment.serverUrl, options: {} };
     MatSidenavModule,
     MatProgressSpinnerModule,
     MatGridListModule,
+    MatDialogModule,
   ],
   providers: [],
   bootstrap: [AppComponent]
